@@ -1,7 +1,9 @@
 package br.org.generation.blogpessoal.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name="tb_tema")
@@ -23,6 +27,10 @@ public class Tema {
 	@NotNull(message="Halloween")
 	@Size(min=3,max=100,message="O tema deve conter no minímo 3 e no máximo 100 caracteres.")
 	private String titulo;
+	
+	@Column(name = "data_lancamento")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dataLancamento;
 	
 	@UpdateTimestamp
 	private LocalDateTime date;
