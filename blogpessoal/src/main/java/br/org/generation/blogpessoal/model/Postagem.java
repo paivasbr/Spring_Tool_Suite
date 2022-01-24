@@ -32,9 +32,9 @@ public class Postagem {
 	@Size(min=10,max=200,message="O atributo título deve conter no min a minha paciencia em 10 e no max 200")
 	private String texto;
 	
-	@Column(name = "data_do_tema")
+	@Column(name = "data_das_postagens")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataTema;
+    private LocalDate dataPostagens;
 	
 	@UpdateTimestamp
 	private LocalDateTime data;
