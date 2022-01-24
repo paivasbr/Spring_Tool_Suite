@@ -28,9 +28,9 @@ public class Tema {
 	@Size(min=3,max=100,message="O tema deve conter no minímo 3 e no máximo 100 caracteres.")
 	private String titulo;
 	
-	@Column(name = "data_lancamento")
+	@Column(name = "data_do_tema")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataLancamento;
+    private LocalDate dataTema;
 	
 	@UpdateTimestamp
 	private LocalDateTime date;

@@ -1,7 +1,9 @@
 package br.org.generation.blogpessoal.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +13,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name="tb_postagens")
@@ -27,6 +31,10 @@ public class Postagem {
 	@NotBlank(message="Sangue de Jesus tem Poder")
 	@Size(min=10,max=200,message="O atributo título deve conter no min a minha paciencia em 10 e no max 200")
 	private String texto;
+	
+	@Column(name = "data_do_tema")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dataTema;
 	
 	@UpdateTimestamp
 	private LocalDateTime data;
