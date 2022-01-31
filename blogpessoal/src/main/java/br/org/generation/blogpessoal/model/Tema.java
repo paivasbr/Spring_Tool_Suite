@@ -1,20 +1,16 @@
 package br.org.generation.blogpessoal.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="tb_tema")
@@ -24,16 +20,12 @@ public class Tema {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull(message="Halloween")
-	@Size(min=3,max=100,message="O tema deve conter no minímo 3 e no máximo 100 caracteres.")
-	private String titulo;
+	@NotNull(message="O atributo DESCRIÇÃO é obrigatório")
+	private String descricao;
 	
-	@Column(name = "data_do_tema")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataTema;
-	
-	@UpdateTimestamp
-	private LocalDateTime date;
+	@OneToMany(mappedBy = "tema", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("tema")
+    private List<Postagem> postagem;
 
 	public Long getId() {
 		return id;
@@ -43,21 +35,19 @@ public class Tema {
 		this.id = id;
 	}
 
-	public String getTitulo() {
-		return titulo;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
-	public LocalDateTime getDate() {
-		return date;
+	public List<Postagem> getPostagem() {
+		return postagem;
 	}
 
-	public void setDate(LocalDateTime date) {
-		this.date = date;
+	public void setPostagem(List<Postagem> postagem) {
+		this.postagem = postagem;
 	}
-	
-	
 }

@@ -1,20 +1,19 @@
 package br.org.generation.blogpessoal.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="tb_postagens")
@@ -24,20 +23,24 @@ public class Postagem {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message="Sangue de Jesus tem Poder")
+	@NotBlank(message="O atributo título é obrigatório")
 	@Size(min=5,max=100,message="O atributo título deve conter no min a minha paciencia em 5 e no max 100")
 	private String titulo;
 	
-	@NotBlank(message="Sangue de Jesus tem Poder")
-	@Size(min=10,max=200,message="O atributo título deve conter no min a minha paciencia em 10 e no max 200")
+	@NotBlank(message="O atributo título é obrigatório")
+	@Size(min=10,max=500,message="O atributo título deve conter no min a minha paciencia em 10 e no max 200")
 	private String texto;
-	
-	@Column(name = "data_das_postagens")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataPostagens;
 	
 	@UpdateTimestamp
 	private LocalDateTime data;
+	
+	@ManyToOne
+    @JsonIgnoreProperties("postagem")
+    private Tema tema;
+	
+	@ManyToOne
+    @JsonIgnoreProperties("postagem")
+    private Usuario usuario;
 
 	public Long getId() {
 		return id;
@@ -69,6 +72,22 @@ public class Postagem {
 
 	public void setData(LocalDateTime data) {
 		this.data = data;
+	}
+
+	public Tema getTema() {
+		return tema;
+	}
+
+	public void setTema(Tema tema) {
+		this.tema = tema;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	
 }
