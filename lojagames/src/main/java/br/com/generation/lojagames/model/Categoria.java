@@ -2,6 +2,7 @@ package br.com.generation.lojagames.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,10 +23,10 @@ public class Categoria {
 	private Long id;
 	
 	@NotBlank(message="O preenchimento deste campo é obrigatório.")
-	@Size(min=5,max=100,message="O campo obrigatório deve conter no minímo 5 e no máximo 100 caracteres.")
+	@Size(min = 5)
 	private String tipo;
 	
-	@OneToMany
+	@OneToMany(mappedBy="categoria", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("categoria")
 	private List <Produtos> produtos;
 
@@ -52,6 +53,6 @@ public class Categoria {
 	public void setProdutos(List<Produtos> produtos) {
 		this.produtos = produtos;
 	}
-	
+
 }
 	

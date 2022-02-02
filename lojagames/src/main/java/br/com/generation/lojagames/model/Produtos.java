@@ -1,9 +1,7 @@
 package br.com.generation.lojagames.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,9 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -25,25 +24,24 @@ public class Produtos {
 	private Long id;
 	
 	@NotBlank(message="O preenchimento deste campo é obrigatório.")
-	@Size(min=5,max=100,message="O campo obrigatório deve conter no minímo 5 e no máximo 100 caracteres.")
-	private String titulo;
+	private String nome;
 	
-	@Column(name = "data_lancamento")
-	@JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dataLancamento;
+	@Size(max=350)
+	private String descricao;
 	
 	@NotBlank(message="O preenchimento deste campo é obrigatório.")
-	@Size(min=5,max=100,message="O campo obrigatório deve conter no minímo 5 e no máximo 100 caracteres.")
 	private String console;
 	
-	@JsonFormat(shape=JsonFormat.Shape.STRING)
-	@NotBlank(message="Campo Obrigatório")
-	private BigDecimal valor;
-
-	@ManyToOne
-	@JsonIgnoreProperties("produto")
-	private Categoria categoria_id;
+	private int quantidade;
 	
+	@NotNull(message = "O preço é obrigatório!")
+	@Positive(message = "O preço deve ser maior do que zero!")
+	private BigDecimal preco;
+	
+	@ManyToOne
+	@JsonIgnoreProperties("produtos")
+	private Categoria categoria;
+
 	public Long getId() {
 		return id;
 	}
@@ -52,20 +50,20 @@ public class Produtos {
 		this.id = id;
 	}
 
-	public String getTitulo() {
-		return titulo;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
-	public LocalDate getDataLancamento() {
-		return dataLancamento;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setDataLancamento(LocalDate dataLancamento) {
-		this.dataLancamento = dataLancamento;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public String getConsole() {
@@ -76,12 +74,28 @@ public class Produtos {
 		this.console = console;
 	}
 
-	public BigDecimal getValor() {
-		return valor;
+	public int getQuantidade() {
+		return quantidade;
 	}
 
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
 	}
-	
+
+	public BigDecimal getPreco() {
+		return preco;
+	}
+
+	public void setPreco(BigDecimal preco) {
+		this.preco = preco;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 }
