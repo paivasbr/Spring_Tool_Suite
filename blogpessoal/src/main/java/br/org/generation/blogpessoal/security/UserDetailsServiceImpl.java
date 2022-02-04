@@ -12,20 +12,19 @@ import br.org.generation.blogpessoal.model.Usuario;
 import br.org.generation.blogpessoal.repository.UsuarioRepository;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
-
+public class UserDetailsServiceImpl implements UserDetailsService{
+	
 	@Autowired
 	private UsuarioRepository userRepository;
-
+	
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
+		
 		Optional<Usuario> usuario = userRepository.findByUsuario(userName);
-
-	  
+		
 		usuario.orElseThrow(() -> new UsernameNotFoundException(userName + " not found."));
 
 		return usuario.map(UserDetailsImpl::new).get();
 	}
 }
-	

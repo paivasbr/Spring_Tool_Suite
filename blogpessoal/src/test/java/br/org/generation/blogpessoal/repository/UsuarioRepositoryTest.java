@@ -28,7 +28,7 @@ public class UsuarioRepositoryTest {
 
 		usuarioRepository.save(new Usuario(0L, "Ste Maria da Silva", "stezinha@email.com.br", "12465278", "  "));
 		
-		usuarioRepository.save(new Usuario(0L, "Bruninha Vida Loka", "bruninhavidal0ka@email.com.br", "13465278", "  "));
+		usuarioRepository.save(new Usuario(0L, "Bruninha Vida Silva", "bruninhavidal0ka@email.com.br", "13465278", "  "));
 		
 		usuarioRepository.save(new Usuario(0L, "Daniela Fulana da Silva", "danifullsilvs@email.com.br", "13465278", "	"));
 	
@@ -48,10 +48,10 @@ public class UsuarioRepositoryTest {
 	@DisplayName("Retorna 3 usuarios")
 	public void deveRetornarTresUsuarios() {
 		
-		List<Usuario> listaDeUsuarios = usuarioRepository.findAllByNomeCongainingIgnoreCase("Silva");
+		List<Usuario> listaDeUsuarios = usuarioRepository.findAllByNomeContainingIgnoreCase("Silva");
 		assertEquals(3, listaDeUsuarios.size());
 		assertTrue(listaDeUsuarios.get(0).getNome().equals("Ste Maria da Silva"));
-		assertTrue(listaDeUsuarios.get(1).getNome().equals("Bruninha Vida Loka"));
+		assertTrue(listaDeUsuarios.get(1).getNome().equals("Bruninha Vida Silva"));
 		assertTrue(listaDeUsuarios.get(2).getNome().equals("Daniela Fulana da Silva"));
 		
 	}
