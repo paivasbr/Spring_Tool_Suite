@@ -19,18 +19,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.generation.lojagames.model.Produtos;
+import br.com.generation.lojagames.repository.CategoriaRepository;
 import br.com.generation.lojagames.repository.ProdutosRepository;
 
 @RestController
 @RequestMapping("/produtos")
-@CrossOrigin(origins="*",allowedHeaders="*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProdutosController {
 	
 	@Autowired
 	private ProdutosRepository produtosRepository;
 	
-	@GetMapping
-	public ResponseEntity <List<Produtos>> getAll(){
+	@Autowired
+	private CategoriaRepository categoriaRepository;
+	
+	@GetMapping("/listar")
+	public ResponseEntity<List<Produtos>> getAll(){
 		return ResponseEntity.ok(produtosRepository.findAll());
 	}
 	
@@ -46,36 +50,44 @@ public class ProdutosController {
 		return ResponseEntity.ok(produtosRepository.findAllByNomeContainingIgnoreCase(nome));
 	}
 	
+	@GetMapping("preco_maior/{preco}")
+	public ResponseEntity<List<Produtos>> getPrecoMaiorQue(@PathVariable BigDecimal preco){
+		return ResponseEntity.ok(produtosRepository.findByPrecoGreaterThanOrderByPreco(preco));
+	}
+	
+	@GetMapping("preco_menor/{preco}")
+	public ResponseEntity<List<Produtos>> getPrecoMenorQue(@PathVariable BigDecimal preco){
+		return ResponseEntity.ok(produtosRepository.findByPrecoLessThanOrderByPreco(preco));
+	}
+	
 	@PostMapping
-	public ResponseEntity<Produtos> postProdutos(@Valid @RequestBody Produtos produtos){
-		return ResponseEntity.status(HttpStatus.CREATED).body(produtosRepository.save(produtos));
+	public ResponseEntity <Produtos> postProdutos(@Valid @RequestBody Produtos produtos ){
+		return categoriaRepository.findById(produtos.getCategoria().getId())
+				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED ).body(produtosRepository.save(produtos)))
+				.orElse( ResponseEntity.badRequest().build());
 	}
 	
 	@PutMapping
-	public ResponseEntity<Produtos> putProdutos(@Valid @RequestBody Produtos produtos){
-			return produtosRepository.findById(produtos.getId())
-					.map(resposta -> {
-							return ResponseEntity.ok().body(produtosRepository.save(produtos));
-					}).orElse(ResponseEntity.notFound().build());
-	}
+	public ResponseEntity <Produtos> putProduto(@Valid @RequestBody Produtos produtos){
+		if (produtosRepository.existsById(produtos.getId())){
+			return categoriaRepository.findById(produtos.getCategoria().getId())
+					.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(produtosRepository.save(produtos)))
+					.orElse(ResponseEntity.badRequest().build());
+			}
+			return ResponseEntity.notFound().build();
+			}
+	
+	
 	
 	@DeleteMapping("/{id}")
-		public ResponseEntity<?>deleteProdutos(@PathVariable Long id){
+	public ResponseEntity <?> deleteProduto(@PathVariable Long id){
 		return produtosRepository.findById(id)
 				.map(resposta ->{
 					produtosRepository.deleteById(id);
 					return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 				})
-				.orElse(ResponseEntity.notFound().build());	
+				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@GetMapping("/preco_maior/{preco}")
-	public ResponseEntity<List<Produtos>> getPrecoMaiorQue(@PathVariable BigDecimal preco){
-		return ResponseEntity.ok(produtosRepository.findByPrecoGreaterThanOrderByPreco(preco));
-	}
 	
-	@GetMapping("/preco_maior/{preco}")
-	public ResponseEntity<List<Produtos>> getPrecoMenorQue(@PathVariable BigDecimal preco){
-		return ResponseEntity.ok(produtosRepository.findByPrecoLessThanOrderByPreco(preco));
-	}
 }
